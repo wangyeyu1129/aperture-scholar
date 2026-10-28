@@ -8,17 +8,24 @@ from aperture_scholar.application.pipeline import RecommendationPipeline
 from aperture_scholar.config import Settings
 from aperture_scholar.domain.errors import EvidenceRejected, QualityGateRejected
 from aperture_scholar.domain.evidence import EvidenceValidator
+from aperture_scholar.domain.models import ContextPaper, GenerationContext
 
 
 @pytest.fixture
-def pipeline(extraction, gap, idea, report, card):
+def pipeline(document, extraction, gap, idea, report, card):
     return RecommendationPipeline(
         extraction=ExtractionService(
             Mock(extract=Mock(return_value=extraction)), EvidenceValidator(), 2
         ),
         normalizer=Mock(normalize=Mock(side_effect=lambda records: records)),
         gaps=Mock(discover=Mock(return_value=[gap])),
-        retriever=Mock(retrieve=Mock(return_value=[extraction])),
+        retriever=Mock(
+            retrieve=Mock(
+                return_value=GenerationContext(
+                    papers=(ContextPaper(paper=document.paper, extraction=extraction),),
+                )
+            )
+        ),
         generator=Mock(generate=Mock(return_value=[idea])),
         reviewer=Mock(
             review=Mock(return_value=[]), revise=Mock(side_effect=lambda idea, reviews: idea)
@@ -35,6 +42,8 @@ def test_pipeline_runs_and_persists(pipeline, document, card):
     assert pipeline.run([document], as_of=date(2024, 12, 31)) == [card]
     pipeline.cards.save.assert_called_once_with([card])
     assert pipeline.reviewer.review.call_count == 2
+    context = pipeline.generator.generate.call_args.args[1]
+    assert context.papers[0].paper == document.paper
 
 
 def test_empty_corpus_does_not_call_providers(pipeline):
@@ -99,9 +108,10 @@ def test_normalizer_cannot_drop_records(pipeline, document):
 
 
 def test_retriever_cannot_inject_future_papers(pipeline, document, extraction):
-    pipeline.retriever.retrieve.return_value = [
-        extraction.model_copy(update={"paper_id": "future"})
-    ]
+    changed_paper = document.paper.model_copy(update={"abstract": "Injected abstract"})
+    pipeline.retriever.retrieve.return_value = GenerationContext(
+        papers=(ContextPaper(paper=changed_paper, extraction=extraction),),
+    )
     with pytest.raises(QualityGateRejected):
         pipeline.run([document], as_of=date(2024, 12, 31))
 

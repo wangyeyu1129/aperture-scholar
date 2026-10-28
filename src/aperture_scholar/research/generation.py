@@ -3,11 +3,11 @@
 from collections.abc import Sequence
 
 from aperture_scholar.domain.errors import CapabilityNotImplemented
-from aperture_scholar.domain.models import Extraction, Gap, Idea, Review
+from aperture_scholar.domain.models import Gap, GenerationContext, Idea, Review
 
 
 class RetrievalContext:
-    def retrieve(self, gap: Gap, limit: int) -> Sequence[Extraction]:
+    def retrieve(self, gap: Gap, limit: int) -> GenerationContext:
         """TODO I01: retrieve abstracts/limitations and canonical graph neighbors."""
         raise CapabilityNotImplemented("I01: gap-conditioned retrieval")
 
@@ -16,7 +16,7 @@ class ProposalGenerator:
     def generate(
         self,
         gap: Gap,
-        context: Sequence[Extraction],
+        context: GenerationContext,
         excluded: Sequence[str],
         count: int,
     ) -> Sequence[Idea]:
@@ -25,7 +25,7 @@ class ProposalGenerator:
 
 
 class CriteriaReviewer:
-    def review(self, idea: Idea, context: Sequence[Extraction]) -> Sequence[Review]:
+    def review(self, idea: Idea, context: GenerationContext) -> Sequence[Review]:
         """TODO I03: independent novelty/feasibility/clarity criteria, versioned prompts."""
         raise CapabilityNotImplemented("I03: criterion-based reviews")
 

@@ -8,6 +8,7 @@ from aperture_scholar.domain.models import (
     Document,
     Extraction,
     Gap,
+    GenerationContext,
     Idea,
     IdeaCard,
     NoveltyReport,
@@ -45,21 +46,21 @@ class GapDiscovery(Protocol):
 
 
 class ContextRetriever(Protocol):
-    def retrieve(self, gap: Gap, limit: int) -> Sequence[Extraction]: ...
+    def retrieve(self, gap: Gap, limit: int) -> GenerationContext: ...
 
 
 class IdeaGenerator(Protocol):
     def generate(
         self,
         gap: Gap,
-        context: Sequence[Extraction],
+        context: GenerationContext,
         excluded: Sequence[str],
         count: int,
     ) -> Sequence[Idea]: ...
 
 
 class IdeaReviewer(Protocol):
-    def review(self, idea: Idea, context: Sequence[Extraction]) -> Sequence[Review]: ...
+    def review(self, idea: Idea, context: GenerationContext) -> Sequence[Review]: ...
     def revise(self, idea: Idea, reviews: Sequence[Review]) -> Idea: ...
 
 

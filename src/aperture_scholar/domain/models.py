@@ -92,6 +92,24 @@ class CanonicalEntity(Model):
     aliases: tuple[str, ...] = ()
 
 
+class ContextPaper(Model):
+    """Metadata/abstract plus extracted claims for a retrieved paper."""
+
+    paper: Paper
+    extraction: Extraction
+
+    @model_validator(mode="after")
+    def consistent_paper(self) -> "ContextPaper":
+        if self.paper.id != self.extraction.paper_id:
+            raise ValueError("context paper and extraction IDs differ")
+        return self
+
+
+class GenerationContext(Model):
+    papers: tuple[ContextPaper, ...] = ()
+    neighboring_entities: tuple[CanonicalEntity, ...] = ()
+
+
 class Gap(Model):
     id: NonEmpty
     kind: Literal["matrix", "pain_point"]

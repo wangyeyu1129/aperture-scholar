@@ -65,12 +65,15 @@ class RecommendationPipeline:
         corpus_ids = set(ids)
         if any(not set(g.evidence_paper_ids) <= corpus_ids for g in selected):
             raise QualityGateRejected("gap cites a paper outside the corpus")
+        papers_by_id = {document.paper.id: document.paper for document in documents}
+        canonical_by_id = {record.paper_id: record for record in canonical}
         ideas: list[Idea] = []
         for gap in selected:
             context = self.retriever.retrieve(gap, self.settings.context_limit)
-            canonical_by_id = {record.paper_id: record for record in canonical}
-            if len(context) > self.settings.context_limit or any(
-                canonical_by_id.get(record.paper_id) != record for record in context
+            if len(context.papers) > self.settings.context_limit or any(
+                canonical_by_id.get(item.paper.id) != item.extraction
+                or item.paper != papers_by_id.get(item.paper.id)
+                for item in context.papers
             ):
                 raise QualityGateRejected("retriever returned unexpected corpus records")
             batch = self.generator.generate(

@@ -4,7 +4,15 @@ import argparse
 import json
 from pathlib import Path
 
-from aperture_scholar.domain.models import Document, Extraction, Gap, Idea, IdeaCard, NoveltyReport
+from aperture_scholar.domain.models import (
+    Document,
+    Extraction,
+    Gap,
+    GenerationContext,
+    Idea,
+    IdeaCard,
+    NoveltyReport,
+)
 
 
 def main() -> int:
@@ -13,7 +21,7 @@ def main() -> int:
     args = parser.parse_args()
     destination = Path(__file__).resolve().parents[1] / "schemas"
     destination.mkdir(exist_ok=True)
-    for model in (Document, Extraction, Gap, Idea, IdeaCard, NoveltyReport):
+    for model in (Document, Extraction, Gap, GenerationContext, Idea, IdeaCard, NoveltyReport):
         path = destination / f"{model.__name__}.json"
         expected = json.dumps(model.model_json_schema(), indent=2, ensure_ascii=False) + "\n"
         if args.check:

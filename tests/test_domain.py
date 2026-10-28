@@ -128,3 +128,12 @@ def test_cards_reject_wrong_provenance(card):
     payload["novelty"]["idea_id"] = "another"
     with pytest.raises(ValidationError):
         IdeaCard.model_validate(payload)
+
+
+def test_generation_context_rejects_mismatched_extraction(document, extraction):
+    from aperture_scholar.domain.models import ContextPaper
+
+    with pytest.raises(ValidationError):
+        ContextPaper(
+            paper=document.paper, extraction=extraction.model_copy(update={"paper_id": "other"})
+        )
