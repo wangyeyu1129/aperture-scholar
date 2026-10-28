@@ -1,0 +1,15 @@
+# Future research adapters should load a versioned experiment policy.
+# This template is not consumed by the current CLI.
+[corpus]
+max_papers = 300
+citation_hops = 1
+seed_similarity_threshold = 0.7
+[novelty]
+queries_per_idea = 4
+results_per_query = 20
+max_search_rounds = 5
+[limitations]
+min_distinct_papers = 3
+reviewer_weight = 1.0
+author_weight = 0.8
+inferred_weight = 0.4

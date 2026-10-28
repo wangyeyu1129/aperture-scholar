@@ -1,0 +1,143 @@
+{
+  "$defs": {
+    "Overlap": {
+      "enum": [
+        "identical",
+        "high_overlap",
+        "related_but_distinct",
+        "unrelated"
+      ],
+      "title": "Overlap",
+      "type": "string"
+    },
+    "Paper": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "abstract": {
+          "default": "",
+          "title": "Abstract",
+          "type": "string"
+        },
+        "year": {
+          "anyOf": [
+            {
+              "maximum": 9999,
+              "minimum": 1000,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Year"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doi"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ],
+      "title": "Paper",
+      "type": "object"
+    },
+    "PriorArt": {
+      "additionalProperties": false,
+      "properties": {
+        "paper": {
+          "$ref": "#/$defs/Paper"
+        },
+        "overlap": {
+          "$ref": "#/$defs/Overlap"
+        },
+        "difference": {
+          "minLength": 1,
+          "title": "Difference",
+          "type": "string"
+        },
+        "similarity": {
+          "maximum": 1,
+          "minimum": -1,
+          "title": "Similarity",
+          "type": "number"
+        }
+      },
+      "required": [
+        "paper",
+        "overlap",
+        "difference",
+        "similarity"
+      ],
+      "title": "PriorArt",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "idea_id": {
+      "minLength": 1,
+      "title": "Idea Id",
+      "type": "string"
+    },
+    "search_complete": {
+      "title": "Search Complete",
+      "type": "boolean"
+    },
+    "queries": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Queries",
+      "type": "array"
+    },
+    "neighbors": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/PriorArt"
+      },
+      "title": "Neighbors",
+      "type": "array"
+    }
+  },
+  "required": [
+    "idea_id",
+    "search_complete",
+    "queries"
+  ],
+  "title": "NoveltyReport",
+  "type": "object"
+}

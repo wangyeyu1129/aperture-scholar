@@ -1,0 +1,108 @@
+{
+  "$defs": {
+    "ExperimentPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "datasets": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Datasets",
+          "type": "array"
+        },
+        "baselines": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Baselines",
+          "type": "array"
+        },
+        "metrics": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Metrics",
+          "type": "array"
+        }
+      },
+      "required": [
+        "datasets",
+        "baselines",
+        "metrics"
+      ],
+      "title": "ExperimentPlan",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "gap_id": {
+      "minLength": 1,
+      "title": "Gap Id",
+      "type": "string"
+    },
+    "title": {
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "problem": {
+      "minLength": 1,
+      "title": "Problem",
+      "type": "string"
+    },
+    "method_steps": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Method Steps",
+      "type": "array"
+    },
+    "experiment": {
+      "$ref": "#/$defs/ExperimentPlan"
+    },
+    "expected_contributions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Expected Contributions",
+      "type": "array"
+    },
+    "risks": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Risks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "gap_id",
+    "title",
+    "problem",
+    "method_steps",
+    "experiment",
+    "expected_contributions",
+    "risks"
+  ],
+  "title": "Idea",
+  "type": "object"
+}

@@ -1,0 +1,392 @@
+{
+  "$defs": {
+    "DimensionScores": {
+      "additionalProperties": false,
+      "properties": {
+        "novelty": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Novelty",
+          "type": "number"
+        },
+        "feasibility": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Feasibility",
+          "type": "number"
+        },
+        "impact": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Impact",
+          "type": "number"
+        }
+      },
+      "required": [
+        "novelty",
+        "feasibility",
+        "impact"
+      ],
+      "title": "DimensionScores",
+      "type": "object"
+    },
+    "ExperimentPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "datasets": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Datasets",
+          "type": "array"
+        },
+        "baselines": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Baselines",
+          "type": "array"
+        },
+        "metrics": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Metrics",
+          "type": "array"
+        }
+      },
+      "required": [
+        "datasets",
+        "baselines",
+        "metrics"
+      ],
+      "title": "ExperimentPlan",
+      "type": "object"
+    },
+    "Gap": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "matrix",
+            "pain_point"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence_paper_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Paper Ids",
+          "type": "array"
+        },
+        "score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        },
+        "problem_entity_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Problem Entity Id"
+        },
+        "method_entity_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Method Entity Id"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "description",
+        "evidence_paper_ids",
+        "score"
+      ],
+      "title": "Gap",
+      "type": "object"
+    },
+    "Idea": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "gap_id": {
+          "minLength": 1,
+          "title": "Gap Id",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "problem": {
+          "minLength": 1,
+          "title": "Problem",
+          "type": "string"
+        },
+        "method_steps": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Method Steps",
+          "type": "array"
+        },
+        "experiment": {
+          "$ref": "#/$defs/ExperimentPlan"
+        },
+        "expected_contributions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Expected Contributions",
+          "type": "array"
+        },
+        "risks": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Risks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "gap_id",
+        "title",
+        "problem",
+        "method_steps",
+        "experiment",
+        "expected_contributions",
+        "risks"
+      ],
+      "title": "Idea",
+      "type": "object"
+    },
+    "NoveltyReport": {
+      "additionalProperties": false,
+      "properties": {
+        "idea_id": {
+          "minLength": 1,
+          "title": "Idea Id",
+          "type": "string"
+        },
+        "search_complete": {
+          "title": "Search Complete",
+          "type": "boolean"
+        },
+        "queries": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Queries",
+          "type": "array"
+        },
+        "neighbors": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/PriorArt"
+          },
+          "title": "Neighbors",
+          "type": "array"
+        }
+      },
+      "required": [
+        "idea_id",
+        "search_complete",
+        "queries"
+      ],
+      "title": "NoveltyReport",
+      "type": "object"
+    },
+    "Overlap": {
+      "enum": [
+        "identical",
+        "high_overlap",
+        "related_but_distinct",
+        "unrelated"
+      ],
+      "title": "Overlap",
+      "type": "string"
+    },
+    "Paper": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "abstract": {
+          "default": "",
+          "title": "Abstract",
+          "type": "string"
+        },
+        "year": {
+          "anyOf": [
+            {
+              "maximum": 9999,
+              "minimum": 1000,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Year"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doi"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ],
+      "title": "Paper",
+      "type": "object"
+    },
+    "PriorArt": {
+      "additionalProperties": false,
+      "properties": {
+        "paper": {
+          "$ref": "#/$defs/Paper"
+        },
+        "overlap": {
+          "$ref": "#/$defs/Overlap"
+        },
+        "difference": {
+          "minLength": 1,
+          "title": "Difference",
+          "type": "string"
+        },
+        "similarity": {
+          "maximum": 1,
+          "minimum": -1,
+          "title": "Similarity",
+          "type": "number"
+        }
+      },
+      "required": [
+        "paper",
+        "overlap",
+        "difference",
+        "similarity"
+      ],
+      "title": "PriorArt",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "idea": {
+      "$ref": "#/$defs/Idea"
+    },
+    "gap": {
+      "$ref": "#/$defs/Gap"
+    },
+    "novelty": {
+      "$ref": "#/$defs/NoveltyReport"
+    },
+    "scores": {
+      "$ref": "#/$defs/DimensionScores"
+    },
+    "total_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Total Score",
+      "type": "number"
+    },
+    "human_decision": {
+      "default": "pending",
+      "enum": [
+        "pending",
+        "adopt",
+        "skip"
+      ],
+      "title": "Human Decision",
+      "type": "string"
+    }
+  },
+  "required": [
+    "idea",
+    "gap",
+    "novelty",
+    "scores",
+    "total_score"
+  ],
+  "title": "IdeaCard",
+  "type": "object"
+}

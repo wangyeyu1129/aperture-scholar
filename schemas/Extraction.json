@@ -1,0 +1,205 @@
+{
+  "$defs": {
+    "Claim": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "text",
+        "evidence"
+      ],
+      "title": "Claim",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "paper_id": {
+          "minLength": 1,
+          "title": "Paper Id",
+          "type": "string"
+        },
+        "section_id": {
+          "minLength": 1,
+          "title": "Section Id",
+          "type": "string"
+        },
+        "quote": {
+          "minLength": 8,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "paper_id",
+        "section_id",
+        "quote"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Limitation": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        },
+        "source": {
+          "$ref": "#/$defs/LimitationSource"
+        }
+      },
+      "required": [
+        "text",
+        "evidence",
+        "source"
+      ],
+      "title": "Limitation",
+      "type": "object"
+    },
+    "LimitationSource": {
+      "enum": [
+        "author_stated",
+        "reviewer",
+        "inferred"
+      ],
+      "title": "LimitationSource",
+      "type": "string"
+    },
+    "Method": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "category": {
+          "minLength": 1,
+          "title": "Category",
+          "type": "string"
+        },
+        "mechanism": {
+          "minLength": 1,
+          "title": "Mechanism",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "category",
+        "mechanism"
+      ],
+      "title": "Method",
+      "type": "object"
+    },
+    "Problem": {
+      "additionalProperties": false,
+      "properties": {
+        "statement": {
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "canonical": {
+          "minLength": 1,
+          "title": "Canonical",
+          "type": "string"
+        }
+      },
+      "required": [
+        "statement",
+        "canonical"
+      ],
+      "title": "Problem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "paper_id": {
+      "minLength": 1,
+      "title": "Paper Id",
+      "type": "string"
+    },
+    "problem": {
+      "$ref": "#/$defs/Problem"
+    },
+    "methods": {
+      "items": {
+        "$ref": "#/$defs/Method"
+      },
+      "minItems": 1,
+      "title": "Methods",
+      "type": "array"
+    },
+    "datasets": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Datasets",
+      "type": "array"
+    },
+    "metrics": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Metrics",
+      "type": "array"
+    },
+    "limitations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Limitation"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "future_work": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Claim"
+      },
+      "title": "Future Work",
+      "type": "array"
+    },
+    "task_domain": {
+      "minLength": 1,
+      "title": "Task Domain",
+      "type": "string"
+    },
+    "contribution_type": {
+      "enum": [
+        "new method",
+        "new dataset",
+        "analysis",
+        "survey"
+      ],
+      "title": "Contribution Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "paper_id",
+    "problem",
+    "methods",
+    "task_domain",
+    "contribution_type"
+  ],
+  "title": "Extraction",
+  "type": "object"
+}

@@ -1,0 +1,7 @@
+{
+  "version": "draft-1",
+  "status": "template-needs-domain-human-calibration",
+  "novelty": ["Identify the closest prior work", "State the substantive methodological difference"],
+  "feasibility": ["Check dataset access", "Check compute budget", "Check baseline reproducibility"],
+  "clarity": ["Require concrete method steps", "Require falsifiable evaluation criteria"]
+}
